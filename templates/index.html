@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School Donations Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/bootstrap.min.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/keen-dashboards.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/dc.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/introjs.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')  }}">
+</head>
+<body class="application">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="./">School Donations Dashboard</a>
+            <button class="intro_button" type="button" autofocus onclick="javascript:introJs().start();">Start Tour!</button>
+        </div>
+    </div>
+    <div id="outer" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="row">
+                    <!-- TIME CHART -->
+                    <div class="col-sm-12">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Number of Donations
+                            </div>
+                            <div class="chart-stage">
+                                <div id="time-chart" data-step="1" data-intro="Timeline for the number of donations" style="font-weight: normal" data-position="right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- TIME CHART -->
+                    <!-- Resources -->
+                    <div class="col-sm-6">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Resources Type
+                            </div>
+                            <div class="chart-stage">
+                                <div id="resource-type-row-chart" data-step="2" data-intro="Types of resources available" style="font-weight: normal" data-position="right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Resources -->
+
+                    <!-- FUNDING PIE CHART -->
+                    <div class="col-sm-6">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Funding Status
+                            </div>
+                            <div class="chart-stage">
+                                <div id="funding-chart" data-step="3" data-intro="Whether funding is ongoing or not" style="font-weight: normal" data-position="right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FUNDING PIE CHART -->
+                </div>
+            </div>
+            <!-- POVERTY -->
+            <div class="col-sm-3">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Poverty Level
+                    </div>
+                    <div class="chart-stage">
+                        <div id="poverty-level-row-chart" data-step="4" data-intro="How poor is the school" style="font-weight: normal" data-position="right"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- POVERTY -->
+            <!-- MENU SELECT -->
+            <div class="col-sm-6">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Donation State
+                    </div>
+                    <div class="chart-stage">
+                        <div id="menu-select"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- MENU SELECT -->
+            <!-- METRIC 1 -->
+            <div class="col-sm-2">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Total Number of Donations
+                    </div>
+                    <div class="chart-stage" style="background: #33CC99;
+                        position: relative;
+                        font-size: 29px;
+                        color: white;
+                        vertical-align: middle;
+                        text-align: center;
+                        padding-top: 12px;
+                        padding-bottom: 0px;">
+                        <div id="number-projects-nd" data-step="5" data-intro="Total donations from all States" style="font-weight: normal" data-position="right"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- METRIC 1 -->
+            <!-- METRIC 2 -->
+            <div class="col-sm-2">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Total Donations in USD
+                    </div>
+                    <div class="chart-stage">
+                        <div id="total-donations-nd" data-step="6" data-intro="Total Dollar value of donations" style="font-weight: normal" data-position="right"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- METRIC 2 -->
+        </div>
+        <hr>
+        <p class="small text-muted">Data viz &#9829; from Code Institute</p>
+    </div>
+
+<script src="{{ url_for('static',filename='lib/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/crossfilter.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/d3.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/dc.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/queue.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/queue.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/keen.min.js') }}"></script>
+<script src="{{ url_for('static',filename='lib/js/intro.js') }}"></script>
+<script src="{{ url_for('static',filename='js/graph.js') }}"></script>
+
+
+    <script src="lib/js/intro.js"
+</body>
+</html>
