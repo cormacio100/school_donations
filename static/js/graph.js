@@ -24,46 +24,24 @@ queue()
 function makeGraphs(error,projectsJson){
     //  Clean projectsJson data
     var donorsUSProjects = projectsJson;
-    //  determine date format
-    var dateFormat = d3.time.format("%Y-%m-%d %H:");
+    var dateFormat = d3.time.format("%Y-%m-%d %H:");    //  determine date format
     //  Parse the DATA into correct format
-
-    var i = 0;
     donorsUSProjects.forEach(function(d){
-
-        //console.log(d);
-        i + 1;
-
-        if(i==1){
-            //console.log('exiting');
-
-            if(d.date_posted === null){
-                console.log('date is null');
-            }
-
-
-            return false;
+        d.date_posted = dateFormat.parse(d.date_posted);
+        console.log(d);
+        if (d.date_posted != null){
+            //console.log('date set');
+            d.date_posted.setDate(1);
         }
 
-
-
-       // d['date_posted'] = dateFormat.parse(d['date_posted']);
-       // d['date_posted'].setDate(1);
-        d['total_definitions'] = +d['total_donations'];  //  + sets data type of total_donations to a number
-
-        //d.date_posted = dateFormat.parse(d.date_posted);
-        //d.date_posted.setDate(1);
-        //  set donations as a number
-        //d.total_definitions = +d.total_donations;  //  + sets data type of total_donations to a number
+        d.total_definitions = +d.total_donations;  //  + sets data type of total_donations to a number
     });
-
 
 //  Use CROSSFILTER.js to create a CROSSFILTER instance from the DATA
 //  so that DATA is INDEXED and can be filtered
 //  -   Crossfilter 2 way binding pipeline allows:
 //      -   Data selections on each chart to be auto applied to other charts
 //      -   Drill down functionality enabled
-
 
 ////////////////////////////////////////////////////////
 //  CROSSFILTER.JS SECTION
@@ -78,8 +56,6 @@ function makeGraphs(error,projectsJson){
     //  2 - Define Dimensions on the Crossfiltered data
     //  On date_posted
     var dateDim = ndx.dimension(function(d){
-        //console.log(d);
-        //return d["date_posted"];
         return d.date_posted;
     });
     //  on resource type
@@ -138,11 +114,8 @@ function makeGraphs(error,projectsJson){
         return d.total_donations;
     });
 
-    console.log('totalDonations...');
-    console.log(totalDonations);
-
     //  retrieve which state donated the most
-   // var max_state = totalDonations.top(1)[0].value;
+    // var max_state = totalDonations.top(1)[0].value;
 
     //  Define values to be used in charts
     var minDate = dateDim.bottom(1)[0]["date_posted"];
@@ -158,21 +131,61 @@ function makeGraphs(error,projectsJson){
     //  DEFINE CHART TYPES AND BIND THEM TO THE DIV ID'S IN INDEX.HTML
     //  DETERMINE WHERE IN DOM EACH CHART WILL APPEAR
     //  AND WHAT TYPE OF CHART WILL APPEAR THERE
-    var timeChart = dc.barChart('#time-chart');
-    var resourceTypeChart = dc.rowChart('#resource-type-row-chart');
-    var povertyLevelChart = dc.rowChart('#poverty-level-row-chart');
-    var numberProjectsND = dc.numberDisplay('#number-projects-nd');
-    var totalDonationsND = dc.numberDisplay('#total-donations-nd');
-    var fundingStatusChart = dc.pieChart('#funding-chart');
+    var timeChart = dc.barChart('#time-chart');                         //  NUMBER OF DONATIONS
+    var povertyLevelChart = dc.rowChart('#poverty-level-row-chart');    //  POVERTY LEVEL
+    var resourceTypeChart = dc.rowChart('#resource-type-row-chart');    //  RESOURCES TYPE
+    var fundingStatusChart = dc.pieChart('#funding-chart');             //  FUNDING STATUS
+    var numberProjectsND = dc.numberDisplay('#number-projects-nd');     //  TOTAL NUMBER OF DONATIONS
+    var totalDonationsND = dc.numberDisplay('#total-donations-nd');     //  TOTAL DONATIONS IN USD
 
-    //  BUILD THE CONTENTS FOR EACH CHART
+    //  ###########################################
+    //  BUILD THE CHARTS
+    //  ASSIGN PROPERTIES AND VALUES TO OUR CHARTS
+    //  ###########################################
+
+    //  Barchart
+    timeChart
+        .width(800)
+        .height(200)
+        .margins({top:10,right:50,bottom: 30,left:50})
+        .dimension(dateDim)
+        .group(numProjectsByDate)
+        .transitionDuration(500)
+        .x(d3.time.scale().domain([minDate,maxDate]))
+        .elasticY(true)
+        .xAxisLabel('Year')
+        .yAxis().ticks(4);
+
+    //  Row Chart
+    povertyLevelChart
+        .width(300)
+        .height(250)
+        .dimension(povertyLevelDim)
+        .group(numProjectsByPovertyLevel)
+        .xAxis().ticks(4);
+
+    //  Row Chart
+    resourceTypeChart
+        .width(300)
+        .height(250)
+        .dimension(resourceTypeDim)         //  tell the chart what dimension to use
+        .group(numProjectsByResourceType)   //  tell the chart what group to use
+        .xAxis().ticks(4);
+
+    //  Pie Chart
+    fundingStatusChart
+        .height(220)
+        .radius(90)
+        .innerRadius(40)
+        .transitionDuration(1500)
+        .dimension(fundingStatus)
+        .group(numProjectsByFundingStatus);
 
     //  build the SELECT MENU
     selectField = dc.selectMenu('#menu-select')
                     .dimension(stateDim)
                     .group(stateGroup);
 
-    //  Assign properties and values to our charts
     //  FORMAT Numbers to be displayed in numberDisplay
     numberProjectsND
         .formatNumber(d3.format("d"))
@@ -190,46 +203,6 @@ function makeGraphs(error,projectsJson){
         .group(totalDonations)
         .formatNumber(d3.format(".3s"));
 
-    //  Barchart
-    timeChart
-        .width(800)
-        .height(200)
-        .margins({top:10,right:50,bottom: 30,left:50})
-        .dimension(dateDim)
-        .group(numProjectsByDate)
-        .transitionDuration(500)
-        .x(d3.time.scale().domain([minDate,maxDate]))
-        .elasticY(true)
-        .xAxisLabel('Year')
-        .yAxis().ticks(4);
-
-    //  Row Chart
-    resourceTypeChart
-        .width(300)
-        .height(250)
-        .dimension(resourceTypeDim)         //  tell the chart what dimension to use
-        .group(numProjectsByResourceType)   //  tell the chart what group to use
-        .xAxis().ticks(4);
-
-    //  Row Chart
-    povertyLevelChart
-        .width(300)
-        .height(250)
-        .dimension(povertyLevelDim)
-        .group(numProjectsByPovertyLevel)
-        .xAxis().ticks(4);
-
-    //  Pie Chart
-    fundingStatusChart
-        .height(220)
-        .radius(90)
-        .innerRadius(40)
-        .transitionDuration(1500)
-        .dimension(fundingStatus)
-        .group(numProjectsByFundingStatus);
-
     //  RENDER THE CHARTS
     dc.renderAll();
-
-
 }
