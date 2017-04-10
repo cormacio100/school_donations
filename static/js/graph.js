@@ -24,16 +24,13 @@ queue()
 function makeGraphs(error,projectsJson){
     //  Clean projectsJson data
     var donorsUSProjects = projectsJson;
-    var dateFormat = d3.time.format("%Y-%m-%d %H:");    //  determine date format
+    var dateFormat = d3.time.format("%d/%m/%Y %H:%M");    //  determine date format
     //  Parse the DATA into correct format
     donorsUSProjects.forEach(function(d){
         d.date_posted = dateFormat.parse(d.date_posted);
-        console.log(d);
         if (d.date_posted != null){
-            //console.log('date set');
             d.date_posted.setDate(1);
         }
-
         d.total_definitions = +d.total_donations;  //  + sets data type of total_donations to a number
     });
 
