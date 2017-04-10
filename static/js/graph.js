@@ -28,6 +28,7 @@ function makeGraphs(error,projectsJson){
     //  Parse the DATA into correct format
     donorsUSProjects.forEach(function(d){
         d.date_posted = dateFormat.parse(d.date_posted);
+
         if (d.date_posted != null){
             d.date_posted.setDate(1);
         }
